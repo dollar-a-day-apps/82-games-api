@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Set up, migrate and add initial seeds based on the database schema
+
+set -e
+
+# provides the path to the sequelize cli
+PATH="$PATH:node_modules/.bin"
+
+# dev
+sequelize db:create || true # create db if it doesn't exist
+sequelize db:migrate
+sequelize db:seed:all

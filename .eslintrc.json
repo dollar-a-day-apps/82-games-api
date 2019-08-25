@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:security/recommended"
+  ],
+  "rules": {
+    "max-len": ["error", {
+      "code": 120,
+      "tabWidth": 2,
+      "ignoreComments": true,
+      "ignoreUrls": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "consistent-return": 0,
+    "camelcase": 0,
+    "strict": ["error", "never"],
+    "no-else-return": 0,
+    "no-underscore-dangle": 0,
+    "eol-last": ["error", "always"]
+  },
+  "plugins": [
+    "security"
+  ]
+}

@@ -1,0 +1,73 @@
+version: 2.1
+
+executors:
+  build-executor:
+    docker:
+      - image: circleci/node:10.15.3-browsers
+      - image: circleci/postgres:11.1-ram
+
+commands:
+  install-and-cache-deps:
+    parameters:
+      directory:
+        type: string
+    steps:
+      - restore_cache:
+          key: dependency-cache-{{ checksum "<< parameters.directory >>/package.json" }}
+      - run:
+          name: install-npm-deps
+          command: cd << parameters.directory >> && npm install
+      - save_cache: # cache the deps
+          key: dependency-cache-{{ checksum "<< parameters.directory >>/package.json" }}
+          paths:
+            - << parameters.directory >>/node_modules
+  run-npm-script:
+    parameters:
+      label:
+        type: string
+      background:
+        type: boolean
+        default: false
+      directory:
+        type: string
+      script:
+        type: string
+        default: start
+    steps:
+      - run:
+          name: npm-run << parameters.label >>
+          command: cd << parameters.directory >> && npm run << parameters.script >>
+          background: << parameters.background >>
+
+jobs:
+  build:
+    executor: build-executor
+    working_directory: ~/82-games-api
+    environment:
+      CI: true
+      DB_USER: postgres
+    steps:
+      - checkout
+      - run:
+          name: install-npm
+          command: 'sudo npm install -g npm@latest'
+      # Initialize database
+      - run:
+          name: wait-for-db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: install-db-deps
+          command: sudo apt-get update && sudo apt-get install postgresql-client
+      - run:
+          name: grant-db-superuser
+          command: psql -c "ALTER USER postgres WITH SUPERUSER" -U postgres -h localhost -p 5432
+      - install-and-cache-deps:
+          directory: ~/82-games-api
+      - run:
+          name: migrate-db
+          command: scripts/setupDatabase
+      - run-npm-script:
+          label: api-dev
+          directory: ~/82-games-api
+          script: dev
+          background: true
