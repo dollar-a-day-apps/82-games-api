@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'cascade',
       hooks: 'true',
     });
-    Athlete.hasMany(models.AthleteStatistics, {
+    Athlete.hasMany(models.AthleteStatistic, {
       foreignKey: 'athleteId',
       onDelete: 'cascade',
       hooks: 'true',

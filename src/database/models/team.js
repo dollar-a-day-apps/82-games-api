@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
+    logoUrl: {
+      default: '',
+      type: DataTypes.STRING,
+    },
     websiteUrl: {
       default: '',
       type: DataTypes.STRING,

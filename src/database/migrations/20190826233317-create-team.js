@@ -11,6 +11,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      logoUrl: {
+        default: '',
+        type: Sequelize.STRING,
+      },
       websiteUrl: {
         default: '',
         type: Sequelize.STRING,
