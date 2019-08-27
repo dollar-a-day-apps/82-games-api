@@ -1,7 +1,7 @@
 {
   "name": "project-dream-api",
   "version": "1.0.0",
-  "description": "RESTful API that handles requests from various Project Dream client applications",
+  "description": "RESTful API that handles requests from various 82-Games applications",
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon --exec node -r dotenv/config src/index.js",
