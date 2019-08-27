@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const defaultDateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
+const defaultDateTimeFormat = 'YYYY-MM-DD HH:mm:ss.SSSSSSZ';
 
 // Convenient method to get the current timestamp pre-formatted for Postgresql's Date type
 module.exports = {
@@ -8,4 +8,5 @@ module.exports = {
   timestampToDateTime: timestamp => moment.unix(timestamp).format(defaultDateTimeFormat),
   dateTimeToTimestamp: dateTime => `${moment(dateTime).unix()}`,
   currentDateTime: moment().format(defaultDateTimeFormat),
+  convertToUtc: date => moment.utc(date).format('YYYY-MM-DD HH:mm:ss.SSSSSSZ'),
 };

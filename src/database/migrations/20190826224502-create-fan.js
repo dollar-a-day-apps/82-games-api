@@ -1,24 +1,28 @@
 module.exports = {
   up: (queryInterface, Sequelize) => (
-    queryInterface.createTable('Users', {
+    queryInterface.createTable('Fans', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      fullName: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      userType: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING,
       },
       profilePictureUrl: {
+        default: '',
+        type: Sequelize.STRING,
+      },
+      email: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      profileTagLine: {
+      kycVerified: {
+        default: false,
+        type: Sequelize.BOOLEAN,
+      },
+      auth0Id: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -32,5 +36,5 @@ module.exports = {
       },
     })
   ),
-  down: queryInterface => queryInterface.dropTable('Users'),
+  down: queryInterface => queryInterface.dropTable('Fans'),
 };

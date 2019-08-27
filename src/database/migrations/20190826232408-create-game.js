@@ -1,19 +1,27 @@
 module.exports = {
   up: (queryInterface, Sequelize) => (
-    queryInterface.createTable('UserPaymentCards', {
+    queryInterface.createTable('Games', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
+      dateTime: {
         allowNull: false,
-        type: Sequelize.UUID,
+        type: Sequelize.DATE,
       },
-      metadata: {
+      homeTeamId: {
         allowNull: false,
-        type: Sequelize.JSON,
+        type: Sequelize.INTEGER,
+      },
+      awayTeamId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      arena: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -25,5 +33,5 @@ module.exports = {
       },
     })
   ),
-  down: queryInterface => queryInterface.dropTable('UserPaymentCards'),
+  down: queryInterface => queryInterface.dropTable('Games'),
 };
