@@ -1,5 +1,5 @@
 module.exports = {
   routeErrorMessages: {
-    FETCH_USER_FAILED: 'Failed to fetch user',
+    FETCH_TEAMS_FAILED: 'Failed to fetch team records',
   },
 };
