@@ -18,6 +18,7 @@ const {
 const {
   teamRoutes,
   athleteRoutes,
+  gameRoutes,
   serviceRoutes,
 } = require('./routes');
 
@@ -101,6 +102,7 @@ app.use('/service', serviceRoutes);
 // Public endpoints
 app.use('/api/team', teamRoutes);
 app.use('/api/athlete', athleteRoutes);
+app.use('/api/game', gameRoutes);
 
 // Default response for invalid endpoints/routes
 app.use((req, res) => {
