@@ -1,4 +1,3 @@
-const moment = require('moment');
 const express = require('express');
 const rateLimiter = require('express-rate-limit');
 const speedLimiter = require('express-slow-down');
@@ -7,10 +6,6 @@ const Sentry = require('@sentry/node');
 const getUserIpAddress = require('./util/get-user-ip-address');
 const setUserIpAddress = require('./util/set-user-ip-address');
 const throwError = require('./util/throw-error');
-// 2019-08-28 04:33:50+07
-// 2019-10-04 19.39
-// console.log(moment('Friday, October 4 7:30 PM ET').format('YYYY-MM-DD'));
-console.log(moment.utc('2020-01-02 20:30:00-05').format('YYYY-MM-DD HH:mm:ss.SSSSSSZ'));
 
 const {
   NODE_ENV,
@@ -21,6 +16,9 @@ const {
 
 // Routes
 const {
+  teamRoutes,
+  athleteRoutes,
+  gameRoutes,
   serviceRoutes,
 } = require('./routes');
 
@@ -100,6 +98,11 @@ app.use(express.urlencoded({ extended: false }));
 
 // Used for various service-related activities (e.g. health checks)
 app.use('/service', serviceRoutes);
+
+// Public endpoints
+app.use('/api/team', teamRoutes);
+app.use('/api/athlete', athleteRoutes);
+app.use('/api/game', gameRoutes);
 
 // Default response for invalid endpoints/routes
 app.use((req, res) => {

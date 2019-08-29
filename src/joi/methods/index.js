@@ -1,5 +1,7 @@
-const userMethodSchema = require('./user');
+const athleteMethodSchema = require('./athlete');
+const gameMethodSchema = require('./game');
 
 module.exports = {
-  ...userMethodSchema,
+  ...athleteMethodSchema,
+  ...gameMethodSchema,
 };

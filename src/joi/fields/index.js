@@ -1,5 +1,7 @@
-const userSchema = require('./user');
+const athleteSchema = require('./athlete');
+const gameSchema = require('./game');
 
 module.exports = {
-  userSchema,
+  athleteSchema,
+  gameSchema,
 };
