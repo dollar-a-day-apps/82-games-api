@@ -11,6 +11,8 @@ module.exports = {
         name: 'Spencer Dinwiddie',
         teamId: 1,
         positionId: 1,
+        twitterHandle: 'SDinwiddie_25',
+        instagramHandle: 'spencerdinwiddie',
         createdAt: currentDateTime,
         updatedAt: currentDateTime,
       }], {});
