@@ -13,97 +13,97 @@ module.exports = {
 
     if (empty) {
       return queryInterface.bulkInsert('Teams', [{
-        name: 'Brooklyn Nets',
+        name: 'Brooklyn',
         ...insertDate,
       }, {
-        name: 'Franca Franca',
+        name: 'Franca',
         ...insertDate,
       }, {
-        name: 'Los Angeles Lakers',
+        name: 'Los Angeles',
         ...insertDate,
       }, {
-        name: 'Toronto Raptors',
+        name: 'Toronto',
         ...insertDate,
       }, {
-        name: 'Minnesota Timberwolves',
+        name: 'Minnesota',
         ...insertDate,
       }, {
-        name: 'New York Knicks',
+        name: 'New York',
         ...insertDate,
       }, {
-        name: 'Memphis Grizzlies',
+        name: 'Memphis',
         ...insertDate,
       }, {
-        name: 'Indiana Pacers',
+        name: 'Indiana',
         ...insertDate,
       }, {
-        name: 'Houston Rockets',
+        name: 'Houston',
         ...insertDate,
       }, {
-        name: 'Detroit Pistons',
+        name: 'Detroit',
         ...insertDate,
       }, {
-        name: 'New Orleans Pelicans',
+        name: 'New Orleans',
         ...insertDate,
       }, {
-        name: 'Portland Trail Blazers',
+        name: 'Portland',
         ...insertDate,
       }, {
-        name: 'Phoenix Suns',
+        name: 'Phoenix',
         ...insertDate,
       }, {
-        name: 'Utah Jazz',
+        name: 'Utah',
         ...insertDate,
       }, {
-        name: 'Denver Nuggets',
+        name: 'Denver',
         ...insertDate,
       }, {
-        name: 'Chicago Bulls',
+        name: 'Chicago',
         ...insertDate,
       }, {
-        name: 'Charlotte Hornets',
+        name: 'Charlotte',
         ...insertDate,
       }, {
-        name: 'Sacramento Kings',
+        name: 'Sacramento',
         ...insertDate,
       }, {
-        name: 'Cleveland Cavaliers',
+        name: 'Cleveland',
         ...insertDate,
       }, {
-        name: 'Boston Celtics',
+        name: 'Boston',
         ...insertDate,
       }, {
-        name: 'Miami Heat',
+        name: 'Miami',
         ...insertDate,
       }, {
-        name: 'Atlanta Hawks',
+        name: 'Atlanta',
         ...insertDate,
       }, {
-        name: 'Philadelphia 76ers',
+        name: 'Philadelphia',
         ...insertDate,
       }, {
-        name: 'San Antonio Spurs',
+        name: 'San Antonio',
         ...insertDate,
       }, {
-        name: 'Dallas Mavericks',
+        name: 'Dallas',
         ...insertDate,
       }, {
-        name: 'Orlando Magic',
+        name: 'Orlando',
         ...insertDate,
       }, {
-        name: 'Oklahoma City Thunder',
+        name: 'Oklahoma',
         ...insertDate,
       }, {
-        name: 'Milwaukee Bucks',
+        name: 'Milwaukee',
         ...insertDate,
       }, {
-        name: 'Washington Wizards',
+        name: 'Washington',
         ...insertDate,
       }, {
-        name: 'Golden State Warriors',
+        name: 'San Francisco',
         ...insertDate,
       }, {
-        name: 'LA Clippers',
+        name: 'Los Angeles',
         ...insertDate,
       }], {});
     }

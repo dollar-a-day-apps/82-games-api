@@ -25,7 +25,7 @@ module.exports = {
       },
       instagramHandle: {
         default: '',
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

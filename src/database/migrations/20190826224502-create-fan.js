@@ -18,10 +18,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      kycVerified: {
-        default: false,
-        type: Sequelize.BOOLEAN,
-      },
       auth0Id: {
         allowNull: false,
         type: Sequelize.STRING,
