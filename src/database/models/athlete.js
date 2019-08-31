@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     instagramHandle: {
       default: '',
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
   }, {});
 
