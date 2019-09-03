@@ -6,19 +6,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      name: {
+      username: {
         allowNull: false,
-        type: Sequelize.STRING,
-      },
-      profilePictureUrl: {
-        default: '',
         type: Sequelize.STRING,
       },
       email: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      auth0Id: {
+      authId: {
         allowNull: false,
         type: Sequelize.STRING,
       },

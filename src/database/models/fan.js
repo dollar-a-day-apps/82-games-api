@@ -1,18 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
   const Fan = sequelize.define('Fan', {
-    name: {
+    username: {
       allowNull: false,
-      type: DataTypes.STRING,
-    },
-    profilePictureUrl: {
-      default: '',
       type: DataTypes.STRING,
     },
     email: {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    auth0Id: {
+    authId: {
       allowNull: false,
       type: DataTypes.STRING,
     },
