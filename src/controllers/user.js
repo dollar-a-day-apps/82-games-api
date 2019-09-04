@@ -48,12 +48,13 @@ module.exports = {
       // Get additional registration info
       const {
         username,
-        user_metadata,
+        user_metadata = {},
         email_verified,
       } = user;
-
-      const profilePictureUrl = (user_metadata ? user_metadata.profilePictureUrl || '' : '');
-      const name = (user_metadata ? user_metadata.name || '' : '');
+      const {
+        profilePictureUrl = '',
+        name = '',
+      } = user_metadata;
 
       let [authenticatedUser] = await Fan.findOrCreate({ /* eslint prefer-const: 0 */
         where: { email },
@@ -72,6 +73,7 @@ module.exports = {
         name,
       };
     } catch (err) {
+      console.log(err);
       return throwError(new Error(errorMessage), {
         fn: 'authenticateUser',
         source: 'src/controller/user.js',
