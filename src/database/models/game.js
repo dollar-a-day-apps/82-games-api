@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   Game.associate = (models) => {
-    Game.hasMany(models.FanPrediction, {
+    Game.hasMany(models.UserPrediction, {
       foreignKey: 'gameId',
       onDelete: 'cascade',
       hooks: 'true',

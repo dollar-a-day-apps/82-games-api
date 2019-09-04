@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => (
-    queryInterface.createTable('FanPredictions', {
+    queryInterface.createTable('UserPredictions', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,7 +15,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      fanId: {
+      userId: {
         allowNull: false,
         type: Sequelize.UUID,
       },
@@ -33,5 +33,5 @@ module.exports = {
       },
     })
   ),
-  down: queryInterface => queryInterface.dropTable('FanPredictions'),
+  down: queryInterface => queryInterface.dropTable('UserPredictions'),
 };

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const FanPrediction = sequelize.define('FanPrediction', {
+  const UserPrediction = sequelize.define('UserPrediction', {
     gameId: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
-    fanId: {
+    userId: {
       allowNull: false,
       type: DataTypes.UUID,
     },
@@ -18,20 +18,20 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
 
-  FanPrediction.associate = (models) => {
-    FanPrediction.belongsTo(models.Athlete, {
+  UserPrediction.associate = (models) => {
+    UserPrediction.belongsTo(models.Athlete, {
       foreignKey: 'athleteId',
       allowNull: false,
     });
-    FanPrediction.belongsTo(models.Game, {
+    UserPrediction.belongsTo(models.Game, {
       foreignKey: 'gameId',
       allowNull: false,
     });
-    FanPrediction.belongsTo(models.Fan, {
-      foreignKey: 'fanId',
+    UserPrediction.belongsTo(models.User, {
+      foreignKey: 'userId',
       allowNull: false,
     });
   };
 
-  return FanPrediction;
+  return UserPrediction;
 };

@@ -3,6 +3,7 @@ const rateLimiter = require('express-rate-limit');
 const speedLimiter = require('express-slow-down');
 const helmet = require('helmet');
 const Sentry = require('@sentry/node');
+const validateJwt = require('./middleware/validate-jwt');
 const getUserIpAddress = require('./util/get-user-ip-address');
 const setUserIpAddress = require('./util/set-user-ip-address');
 const throwError = require('./util/throw-error');
@@ -16,6 +17,7 @@ const {
 
 // Routes
 const {
+  userRoutes,
   teamRoutes,
   athleteRoutes,
   gameRoutes,
@@ -103,6 +105,11 @@ app.use('/service', serviceRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/athlete', athleteRoutes);
 app.use('/api/game', gameRoutes);
+
+// From this point on, all API routes would require authorization (JWT)
+app.use('/api', validateJwt);
+
+app.use('/api/user', userRoutes);
 
 // Default response for invalid endpoints/routes
 app.use((req, res) => {
