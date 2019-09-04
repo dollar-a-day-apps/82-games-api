@@ -1,5 +1,5 @@
 const uuidv4 = require('uuid/v4');
-const { Fan } = require('../database/models');
+const { User } = require('../database/models');
 const { managementClient } = require('../util/auth');
 const throwError = require('../util/throw-error');
 const validateInput = require('../joi/validate-input');
@@ -23,7 +23,7 @@ module.exports = {
     try {
       // Check the email confirmation status from Auth0
       // and see if the email has already been confirmed
-      const user = await managementClient.getUser({ id: 'auth0|5d6ea06e9d384b0c97e8115d' });
+      const user = await managementClient.getUser({ id: authId });
 
       // Get additional registration info
       const {
@@ -36,7 +36,7 @@ module.exports = {
         name = '',
       } = user_metadata;
 
-      let [authenticatedUser] = await Fan.findOrCreate({ /* eslint prefer-const: 0 */
+      let [authenticatedUser] = await User.findOrCreate({ /* eslint prefer-const: 0 */
         where: { email },
         defaults: {
           id: uuidv4(), // New userId generated via UUID V4 generator

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Fan = sequelize.define('Fan', {
+  const User = sequelize.define('User', {
     username: {
       allowNull: false,
       type: DataTypes.STRING,
@@ -14,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
 
-  Fan.associate = (models) => {
-    Fan.hasMany(models.FanPrediction, {
-      foreignKey: 'fanId',
+  User.associate = (models) => {
+    User.hasMany(models.UserPrediction, {
+      foreignKey: 'userId',
       onDelete: 'cascade',
       hooks: 'true',
     });
   };
 
-  return Fan;
+  return User;
 };

@@ -2,7 +2,7 @@ const Sentry = require('@sentry/node');
 const throwError = require('../util/throw-error');
 const { globalErrors } = require('../util/constants');
 const setUserIpAddress = require('../util/set-user-ip-address');
-const { Fan } = require('../database/models');
+const { User } = require('../database/models');
 
 // Use the authId parsed by JWT to check and get the linked User
 module.exports = async (req, res, next) => {
@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
   const { sub: authId } = user;
 
   // Get the userId that owns the authId
-  const userAuth = await Fan.findOne({ where: { authId } });
+  const userAuth = await User.findOne({ where: { authId } });
 
   if (!userAuth) {
     throwError(new Error(UNAUTHORIZED_ACCESS), {

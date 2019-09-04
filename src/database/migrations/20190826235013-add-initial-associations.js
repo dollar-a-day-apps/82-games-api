@@ -22,7 +22,7 @@ module.exports = {
       hooks: true,
     });
 
-    await queryInterface.changeColumn('FanPredictions', 'athleteId', {
+    await queryInterface.changeColumn('UserPredictions', 'athleteId', {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -33,7 +33,7 @@ module.exports = {
       hooks: true,
     });
 
-    await queryInterface.changeColumn('FanPredictions', 'gameId', {
+    await queryInterface.changeColumn('UserPredictions', 'gameId', {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -44,11 +44,11 @@ module.exports = {
       hooks: true,
     });
 
-    await queryInterface.changeColumn('FanPredictions', 'fanId', {
+    await queryInterface.changeColumn('UserPredictions', 'userId', {
       type: Sequelize.UUID,
       allowNull: false,
       references: {
-        model: 'Fans',
+        model: 'Users',
         key: 'id',
       },
       onDelete: 'cascade',
@@ -78,17 +78,17 @@ module.exports = {
       allowNull: false,
     });
 
-    await queryInterface.changeColumn('FanPredictions', 'athleteId', {
+    await queryInterface.changeColumn('UserPredictions', 'athleteId', {
       type: Sequelize.INTEGER,
       allowNull: false,
     });
 
-    await queryInterface.changeColumn('FanPredictions', 'gameId', {
+    await queryInterface.changeColumn('UserPredictions', 'gameId', {
       type: Sequelize.INTEGER,
       allowNull: false,
     });
 
-    await queryInterface.changeColumn('FanPredictions', 'fanId', {
+    await queryInterface.changeColumn('UserPredictions', 'userId', {
       type: Sequelize.UUID,
       allowNull: false,
     });
