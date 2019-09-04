@@ -23,27 +23,7 @@ module.exports = {
     try {
       // Check the email confirmation status from Auth0
       // and see if the email has already been confirmed
-      const user = await managementClient.getUser({ id: authId });
-
-      if (!user) {
-        errorMessage = 'User not found';
-
-        return throwError(new Error(errorMessage), {
-          fn: 'authenticateUser',
-          source: 'src/controller/user.js',
-          payload: JSON.stringify({
-            authId,
-            request: {
-              url: req.url,
-              rawHeaders: req.rawHeaders,
-              body: req.body,
-            },
-          }),
-        }, {
-          requestUrl: req.url,
-          requestHost: req.headers.host,
-        });
-      }
+      const user = await managementClient.getUser({ id: 'auth0|5d6ea06e9d384b0c97e8115d' });
 
       // Get additional registration info
       const {
@@ -73,7 +53,6 @@ module.exports = {
         name,
       };
     } catch (err) {
-      console.log(err);
       return throwError(new Error(errorMessage), {
         fn: 'authenticateUser',
         source: 'src/controller/user.js',
