@@ -4,6 +4,8 @@ const throwError = require('../../util/throw-error');
 
 module.exports = {
   checkoutCompleted: async (args) => {
+    // The client_reference_id should always be the user/buyer's Auth0 identifier
+    // as set from the frontend, before redirecting the user to Stripe Checkout page
     const {
       client_reference_id: authId,
       display_items,
