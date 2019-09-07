@@ -1,11 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const rateLimiter = require('express-rate-limit');
 const speedLimiter = require('express-slow-down');
 const helmet = require('helmet');
 const Sentry = require('@sentry/node');
-const validateJwt = require('./middleware/validate-jwt');
 const getUserIpAddress = require('./util/get-user-ip-address');
 const setUserIpAddress = require('./util/set-user-ip-address');
+const stripeWebhooks = require('./webhook/stripe');
 const throwError = require('./util/throw-error');
 
 const {
@@ -26,6 +27,8 @@ const {
 
 // App middleware
 const cors = require('./middleware/cors');
+const validateJwt = require('./middleware/validate-jwt');
+const validateStripeSignature = require('./middleware/validate-stripe-signature');
 
 const nodeEnv = NODE_ENV || 'development';
 const port = PORT || 8100;
@@ -94,6 +97,14 @@ app.use(slowDown);
 
 // Apply all default protections from Helmet
 app.use(helmet());
+
+// Special route to catch and handle Stripe webhooks
+app.post(
+  '/stripe',
+  bodyParser.raw({ type: '*/*' }),
+  validateStripeSignature,
+  stripeWebhooks,
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
