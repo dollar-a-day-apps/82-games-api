@@ -1,4 +1,4 @@
-const { managementClient } = require('../../util/auth');
+const { User } = require('../../database/models');
 const { retrieveProduct } = require('../../lib/stripe');
 const throwError = require('../../util/throw-error');
 
@@ -20,14 +20,15 @@ module.exports = {
       // Quick typecasting via multiplication since the metadata is retrieved as String
       const productTicketCount = metadata.ticketCount * 1;
 
-      // Get the user data from Auth0 to fetch the current ticket count of the user
-      const userData = await managementClient.getUser({ id: authId });
-      const { user_metadata = {} } = userData;
-      const { ticketCount = 0 } = user_metadata;
+      // Get the user data to fetch the current ticket count of the user and then update the ticketCount
+      const { ticketCount } = await User.findOne({
+        where: { authId },
+      });
 
-      // Update the user's ticket count after the purchase
-      await managementClient.updateUserMetadata({ id: authId }, {
+      await User.update({
         ticketCount: ticketCount + productTicketCount,
+      }, {
+        where: { authId },
       });
 
       return true;

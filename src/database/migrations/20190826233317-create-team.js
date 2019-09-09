@@ -12,19 +12,19 @@ module.exports = {
         type: Sequelize.STRING,
       },
       logoUrl: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       websiteUrl: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       twitterHandle: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       instagramHandle: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       createdAt: {

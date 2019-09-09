@@ -8,6 +8,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
+    profilePictureUrl: {
+      defaultValue: '',
+      type: DataTypes.STRING,
+    },
+    ticketCount: {
+      defaultValue: 0,
+      type: DataTypes.INTEGER,
+    },
+    trophyCount: {
+      defaultValue: 0,
+      type: DataTypes.INTEGER,
+    },
     authId: {
       allowNull: false,
       type: DataTypes.STRING,

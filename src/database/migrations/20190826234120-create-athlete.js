@@ -20,11 +20,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       twitterHandle: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       instagramHandle: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       createdAt: {
