@@ -14,6 +14,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      profilePictureUrl: {
+        default: '',
+        type: Sequelize.STRING,
+      },
+      ticketCount: {
+        default: 0,
+        type: Sequelize.INTEGER,
+      },
+      trophyCount: {
+        default: 0,
+        type: Sequelize.INTEGER,
+      },
       authId: {
         allowNull: false,
         type: Sequelize.STRING,
