@@ -34,7 +34,7 @@ module.exports = {
       const {
         profilePictureUrl = '',
         name = '',
-        voucherCount = 0,
+        ticketCount = 0,
       } = user_metadata;
 
       let [authenticatedUser] = await User.findOrCreate({ /* eslint prefer-const: 0 */
@@ -52,7 +52,7 @@ module.exports = {
         emailVerified: email_verified,
         profilePictureUrl,
         name,
-        voucherCount,
+        ticketCount,
       };
     } catch (err) {
       return throwError(new Error(errorMessage), {

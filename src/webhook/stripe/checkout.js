@@ -18,16 +18,16 @@ module.exports = {
       // Get the product detail from Stripe to extract the metadata
       const { metadata } = await retrieveProduct(productId);
       // Quick typecasting via multiplication since the metadata is retrieved as String
-      const productVoucherCount = metadata.voucherCount * 1;
+      const productTicketCount = metadata.ticketCount * 1;
 
-      // Get the user data from Auth0 to fetch the current voucher count of the user
+      // Get the user data from Auth0 to fetch the current ticket count of the user
       const userData = await managementClient.getUser({ id: authId });
       const { user_metadata = {} } = userData;
-      const { voucherCount = 0 } = user_metadata;
+      const { ticketCount = 0 } = user_metadata;
 
-      // Update the user's voucher count after the purchase
+      // Update the user's ticket count after the purchase
       await managementClient.updateUserMetadata({ id: authId }, {
-        voucherCount: voucherCount + productVoucherCount,
+        ticketCount: ticketCount + productTicketCount,
       });
 
       return true;
