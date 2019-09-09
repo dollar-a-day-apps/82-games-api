@@ -15,15 +15,15 @@ module.exports = {
         type: Sequelize.STRING,
       },
       profilePictureUrl: {
-        default: '',
+        defaultValue: '',
         type: Sequelize.STRING,
       },
       ticketCount: {
-        default: 0,
+        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       trophyCount: {
-        default: 0,
+        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       authId: {

@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     twitterHandle: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
     instagramHandle: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
   }, {});

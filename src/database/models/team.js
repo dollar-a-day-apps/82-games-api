@@ -5,19 +5,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     logoUrl: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
     websiteUrl: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
     twitterHandle: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
     instagramHandle: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
   }, {});

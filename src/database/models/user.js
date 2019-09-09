@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     profilePictureUrl: {
-      default: '',
+      defaultValue: '',
       type: DataTypes.STRING,
     },
     ticketCount: {
-      default: 0,
+      defaultValue: 0,
       type: DataTypes.INTEGER,
     },
     trophyCount: {
-      default: 0,
+      defaultValue: 0,
       type: DataTypes.INTEGER,
     },
     authId: {
