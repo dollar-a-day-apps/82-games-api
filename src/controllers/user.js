@@ -28,14 +28,8 @@ module.exports = {
       // Get additional registration info
       const {
         username,
-        user_metadata = {},
         email_verified,
       } = user;
-      const {
-        profilePictureUrl = '',
-        name = '',
-        ticketCount = 0,
-      } = user_metadata;
 
       let [authenticatedUser] = await User.findOrCreate({ /* eslint prefer-const: 0 */
         where: { email },
@@ -50,9 +44,6 @@ module.exports = {
       return {
         ...sanitizeObject(authenticatedUser),
         emailVerified: email_verified,
-        profilePictureUrl,
-        name,
-        ticketCount,
       };
     } catch (err) {
       return throwError(new Error(errorMessage), {
