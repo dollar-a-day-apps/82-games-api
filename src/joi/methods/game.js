@@ -1,6 +1,9 @@
 const { gameSchema } = require('../fields/index');
 
-const { teamId } = gameSchema;
+const {
+  id,
+  teamId,
+} = gameSchema;
 
 module.exports = {
   fetchGamesByTeamIdSchema: {
@@ -8,7 +11,15 @@ module.exports = {
       teamId: teamId.required(),
     },
     hints: {
-      id: 'Invalid team identifier',
+      teamId: 'Invalid team identifier',
+    },
+  },
+  fetchGameStatisticByIdSchema: {
+    rules: {
+      id: id.required(),
+    },
+    hints: {
+      id: 'Invalid game identifier',
     },
   },
 };

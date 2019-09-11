@@ -1,4 +1,7 @@
-const { Athlete } = require('../database/models');
+const {
+  Athlete,
+  AthleteStatistic,
+} = require('../database/models');
 const throwError = require('../util/throw-error');
 const validateInput = require('../joi/validate-input');
 const {
@@ -8,6 +11,7 @@ const {
 const {
   fetchAthleteByIdSchema,
   fetchAthletesByTeamIdSchema,
+  fetchAthletStatisticByGameIdSchema,
 } = require('../joi/methods');
 const { routeErrorMessages } = require('../util/constants');
 
@@ -61,6 +65,44 @@ module.exports = {
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_ATHLETES_FAILED), {
         fn: 'fetchAthletesByTeamId',
+        source: 'src/controller/athlete.js',
+        payload: JSON.stringify({
+          errorDetail: err.message,
+          request: {
+            url: req.url,
+            rawHeaders: req.rawHeaders,
+            body: req.body,
+          },
+        }),
+      }, {
+        requestUrl: req.url,
+        requestHost: req.headers.host,
+      });
+    }
+  },
+  fetchAthleteStatisticByGameId: async (req) => {
+    const { query } = req;
+
+    await validateInput(query, fetchAthletStatisticByGameIdSchema);
+
+    const {
+      athleteId,
+      gameId,
+    } = query;
+
+    try {
+      const statistic = await AthleteStatistic.findOne({
+        where: {
+          athleteId,
+          gameId,
+        },
+        plain: true,
+      });
+
+      return sanitizeObject(statistic);
+    } catch (err) {
+      return throwError(new Error(routeErrorMessages.FETCH_ATHLETE_STATISTIC_FAILED), {
+        fn: 'fetchAthleteStatisticByGameId',
         source: 'src/controller/athlete.js',
         payload: JSON.stringify({
           errorDetail: err.message,
