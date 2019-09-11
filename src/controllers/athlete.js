@@ -25,7 +25,7 @@ module.exports = {
         plain: true,
       });
 
-      return sanitizeObject(athlete);
+      return sanitizeObject(athlete, ['referenceId']);
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_ATHLETE_FAILED), {
         fn: 'fetchAthleteById',

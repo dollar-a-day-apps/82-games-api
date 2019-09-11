@@ -9,7 +9,7 @@ module.exports = {
       // Fetch all team records
       const teams = await Team.findAll({ raw: true });
 
-      return sanitizeList(teams);
+      return sanitizeList(teams, ['referenceId']);
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_TEAMS_FAILED), {
         fn: 'fetchTeams',

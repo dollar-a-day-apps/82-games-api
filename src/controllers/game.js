@@ -28,7 +28,7 @@ module.exports = {
         raw: true,
       });
 
-      return sanitizeList(games);
+      return sanitizeList(games, ['referenceId']);
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_GAMES_FAILED), {
         fn: 'fetchGamesByTeamId',
