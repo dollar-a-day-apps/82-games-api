@@ -15,6 +15,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
+      referenceId: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       positionId: {
         allowNull: false,
         type: Sequelize.INTEGER,

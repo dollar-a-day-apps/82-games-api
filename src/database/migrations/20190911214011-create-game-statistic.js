@@ -1,31 +1,29 @@
 module.exports = {
   up: (queryInterface, Sequelize) => (
-    queryInterface.createTable('Games', {
+    queryInterface.createTable('GameStatistics', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      dateTime: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      referenceId: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      homeTeamId: {
+      gameId: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      awayTeamId: {
-        allowNull: false,
+      homeTeamPoints: {
+        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
-      arena: {
-        allowNull: false,
-        type: Sequelize.STRING,
+      awayTeamPoints: {
+        defaultValue: 0,
+        type: Sequelize.INTEGER,
+      },
+      homeTeamStatistics: {
+        type: Sequelize.JSON,
+      },
+      awayTeamStatistics: {
+        type: Sequelize.JSON,
       },
       createdAt: {
         allowNull: false,
@@ -37,5 +35,5 @@ module.exports = {
       },
     })
   ),
-  down: queryInterface => queryInterface.dropTable('Games'),
+  down: queryInterface => queryInterface.dropTable('GameStatistics'),
 };

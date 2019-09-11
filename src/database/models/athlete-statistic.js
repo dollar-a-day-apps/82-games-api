@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     performanceStatistics: {
-      allowNull: false,
       type: DataTypes.JSON,
     },
   }, {});
