@@ -143,7 +143,7 @@ const generatePastGamesStatistic = async () => {
       } = record;
 
       const gameDate = moment.tz(header.GAME_DATE_EST, 'America/New_York');
-      const dbDate = moment.utc(date);
+      const dbDate = moment(date).utc();
 
       if (gameDate.isSame(dbDate, 'day') && (`${homeTeam.TEAM_ID}` === mainTeamId || `${awayTeam.TEAM_ID}` === mainTeamId)) {
         return record;
@@ -239,7 +239,7 @@ const generatePlayerGamesStatistic = async () => {
       dateTime,
     } = game;
 
-    const gameDate = moment.utc(dateTime);
+    const gameDate = moment(dateTime).utc();
     const dbDate = moment.tz(seasonFirstDate, 'America/New_York');
 
     if (gameDate.isBefore(dbDate)) {
