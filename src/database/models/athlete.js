@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
+    referenceId: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     positionId: {
       allowNull: false,
       type: DataTypes.INTEGER,

@@ -30,6 +30,11 @@ const cors = require('./middleware/cors');
 const validateJwt = require('./middleware/validate-jwt');
 const validateStripeSignature = require('./middleware/validate-stripe-signature');
 
+const {
+  generatePastGamesStatistic,
+  // generatePlayerGamesStatistic,
+} = require('./lib/nba');
+
 const nodeEnv = NODE_ENV || 'development';
 const port = PORT || 8100;
 const sentryDsn = SENTRY_DSN;
@@ -147,5 +152,8 @@ app.use((req, res) => {
     requestHost: req.headers.host,
   });
 });
+
+// generatePlayerGamesStatistic();
+generatePastGamesStatistic();
 
 app.listen(port, () => console.log(`🚀 Listening on ${port}`));

@@ -10,6 +10,7 @@ module.exports = {
       return queryInterface.bulkInsert('Athletes', [{
         name: 'Spencer Dinwiddie',
         teamId: 1,
+        referenceId: '203915',
         positionId: 1,
         twitterHandle: 'SDinwiddie_25',
         instagramHandle: 'spencerdinwiddie',

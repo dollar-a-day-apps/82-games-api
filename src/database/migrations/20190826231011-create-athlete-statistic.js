@@ -16,7 +16,6 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       performanceStatistics: {
-        allowNull: false,
         type: Sequelize.JSON,
       },
       createdAt: {
