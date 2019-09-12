@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE,
     },
+    referenceId: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     homeTeamId: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -20,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Game.associate = (models) => {
     Game.hasMany(models.UserPrediction, {
+      foreignKey: 'gameId',
+      onDelete: 'cascade',
+      hooks: 'true',
+    });
+    Game.hasOne(models.GameStatistic, {
       foreignKey: 'gameId',
       onDelete: 'cascade',
       hooks: 'true',

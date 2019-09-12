@@ -2,6 +2,7 @@ const { athleteSchema } = require('../fields/index');
 
 const {
   id,
+  gameId,
   teamId,
 } = athleteSchema;
 
@@ -19,7 +20,17 @@ module.exports = {
       teamId: teamId.required(),
     },
     hints: {
-      id: 'Invalid team identifier',
+      teamId: 'Invalid team identifier',
+    },
+  },
+  fetchAthletStatisticByGameIdSchema: {
+    rules: {
+      athleteId: id.required(),
+      gameId: gameId.required(),
+    },
+    hints: {
+      athleteId: 'Invalid athlete identifier',
+      gameId: 'Invalid game identifier',
     },
   },
 };

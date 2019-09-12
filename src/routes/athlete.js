@@ -3,14 +3,18 @@ const routeHandler = require('../middleware/route-handler');
 const {
   fetchAthleteById,
   fetchAthletesByTeamId,
+  fetchAthleteStatisticByGameId,
 } = require('../controllers');
 
 const router = Router();
 
 // Fetch athlete by id
-router.get('/:id', routeHandler(fetchAthleteById));
+router.get('/profile/:id', routeHandler(fetchAthleteById));
 
 // Fetch athletes by teamId
 router.get('/team/:teamId', routeHandler(fetchAthletesByTeamId));
+
+// Fetch game statistic for the specified athlete and game identifiers
+router.get('/statistic/', routeHandler(fetchAthleteStatisticByGameId));
 
 module.exports = router;
