@@ -29,6 +29,7 @@ const {
 const cors = require('./middleware/cors');
 const validateJwt = require('./middleware/validate-jwt');
 const validateStripeSignature = require('./middleware/validate-stripe-signature');
+const { setupTwitterStream } = require('./lib/twitter-stream');
 
 const nodeEnv = NODE_ENV || 'development';
 const port = PORT || 8100;
@@ -147,5 +148,7 @@ app.use((req, res) => {
     requestHost: req.headers.host,
   });
 });
+
+setupTwitterStream();
 
 app.listen(port, () => console.log(`🚀 Listening on ${port}`));
