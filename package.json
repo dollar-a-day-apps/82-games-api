@@ -43,6 +43,7 @@
     "sequelize": "^5.12.2",
     "sequelize-cli": "^5.5.0",
     "stripe": "^6.25.1",
+    "twitter-stream-api": "^0.5.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
