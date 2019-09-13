@@ -1,5 +1,5 @@
 const TwitterStream = require('twitter-stream-api');
-const { updateCachedTweetsByAthleteId } = require('../redis/twitter');
+const { updateCachedTweetsByAthleteId, getCachedTweetsByAthleteId } = require('../redis/twitter');
 
 const {
   TWITTER_CONSUMER_KEY,
@@ -21,35 +21,55 @@ const setupTwitterStream = () => {
 
   // Stream only for latest tweets from Spencer's account for now
   Twitter.stream('statuses/filter', {
-    track: 'nba',
-    // follow: ['368148234'],
+    // track: 'nba',
+    follow: ['368148234'],
   });
 
   Twitter.on('connection success', (uri) => {
-    console.log('connection success', uri);
+    console.log('Twitter Stream - Connected', uri);
+  });
+
+  Twitter.on('connection aborted', () => {
+    console.log('Twitter Stream - Connection Aborted');
   });
 
   Twitter.on('data', (obj) => {
     // Typecast and parse accordingly as JSON
     const tweet = JSON.parse(obj.toString('utf8'));
-    console.log('----');
-    console.log(tweet.created_at);
     console.log(tweet.text);
     console.log('----');
     updateCachedTweetsByAthleteId(1, tweet);
   });
 
+  Twitter.on('data keep-alive', () => {
+    console.log('Twitter Stream - Keep-alive');
+  });
+
   Twitter.on('data error', (error) => {
-    console.log('data error', error);
+    console.log('Twitter Stream - Error', error);
   });
 
   Twitter.on('connection rate limit', (httpStatusCode) => {
-    console.log('connection rate limit', httpStatusCode);
+    console.log('Twitter Stream - Rate Limit Error', httpStatusCode);
+  });
+
+  Twitter.on('connection error network', (error) => {
+    console.log('Twitter Stream - Network Error', error);
   });
 
   Twitter.on('connection error http', (httpStatusCode) => {
-    console.log('connection error http', httpStatusCode);
+    console.log('Twitter Stream - HTTP Error', httpStatusCode);
   });
+
+  Twitter.on('connection error stall', () => {
+    console.log('Twitter Stream - Connection Stalled');
+  });
+
+  Twitter.on('connection error unknown', (error) => {
+    console.log('Twitter Stream - Unknown Error', error);
+  });
+
+  getCachedTweetsByAthleteId(1, '20190913115900', '20190913115959', 0, 3).then(result => console.log(result));
 };
 
 module.exports = {

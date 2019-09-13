@@ -3,16 +3,23 @@ const { defaultDateTimeFormat } = require('../../util/date');
 const throwError = require('../../util/throw-error');
 const redisClient = require('../redis/client');
 
-const baseAthleteHash = 'athlete-tweets';
+const baseAthleteKey = 'athlete-tweets';
 
-const getAthleteHash = athleteId => `${baseAthleteHash}-${athleteId}`;
+const getAthleteKey = athleteId => `${baseAthleteKey}-${athleteId}`;
 
-// // Get the cached tweets for the specified athleteId
-// const getCachedTweetsByAthleteId = athleteId => redisClient().HGETAsync(getAthleteHash(athleteId), userId);
+// Get the cached tweets for the specified athleteId and date-range
+// The date-range should be already in UTC timezone, formatted as YYYYMMDDHHmmss, ie. 20190901000000 (24Hr-format)
+const getCachedTweetsByAthleteId = async (athleteId, fromDate = '', toDate = '', offset = 0, count = 20) => {
+  const keyName = getAthleteKey(athleteId);
+  const fromTimestamp = fromDate ? moment.utc(fromDate, 'YYYYMMDDHHmmss', 'en').format('x') : '-inf';
+  const toTimestamp = toDate ? moment.utc(toDate, 'YYYYMMDDHHmmss', 'en').format('x') : '+inf';
+
+  return redisClient().ZREVRANGEBYSCOREAsync(keyName, toTimestamp, fromTimestamp, 'LIMIT', offset, count);
+};
 
 // Insert new tweet to the cached athlete tweets for the specified athleteId
 const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
-  const hashName = getAthleteHash(athleteId);
+  const keyName = getAthleteKey(athleteId);
   const {
     id_str: id,
     source,
@@ -22,7 +29,7 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
     user: {
       id_str: userId,
       name: userFullname,
-      screen_nmea: userHandle,
+      screen_name: userHandle,
       profile_image_url_https: userProfileImageUrl,
     },
   } = tweet;
@@ -44,44 +51,11 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
     userProfileImageUrl,
     timestamp,
   };
-
-  let tweets = [];
-  tweets.push(newTweet);
-
-  const serializedStats = JSON.stringify({
-    [hourField]: tweets,
-  });
-
-  let setNx;
-  let data;
-  let deserializedStats;
-  let reserializedStats;
+  const serializedTweet = JSON.stringify(newTweet);
 
   try {
-    // HSETNX sets the value of a key if it does not exist
-    // Access the specified tweet hash and attempt to insert the new tweet
-    setNx = await redisClient().HSETNXAsync(hashName, dateField, serializedStats);
-
-    if (!setNx) {
-      // Pull the current list of cached tweets of the given date and athlete
-      data = await redisClient().HGETAsync(hashName, dateField);
-      deserializedStats = JSON.parse(data);
-
-      if (deserializedStats[hourField]) {
-        tweets = [...deserializedStats[hourField]];
-        tweets.push(newTweet);
-      }
-
-      // Then insert the latest tweet into it before pushing it back to Redis
-      deserializedStats[hourField] = tweets;
-      reserializedStats = JSON.stringify(deserializedStats);
-
-      await redisClient().HSETAsync(hashName, dateField, reserializedStats);
-
-      return reserializedStats;
-    }
-
-    return serializedStats;
+    // Add new record to the sorted-set of the athlete tweets cache
+    await redisClient().ZADDAsync(keyName, `${timestamp}`, serializedTweet);
   } catch (err) {
     return throwError(err, {
       athleteId,
@@ -93,16 +67,13 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
           dateField,
           hourField,
         },
-        serializedStats,
-        setNx,
-        data,
-        deserializedStats,
-        reserializedStats,
+        serializedTweet,
       }),
     });
   }
 };
 
 module.exports = {
+  getCachedTweetsByAthleteId,
   updateCachedTweetsByAthleteId,
 };
