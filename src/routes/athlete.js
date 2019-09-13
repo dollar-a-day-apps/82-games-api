@@ -4,6 +4,7 @@ const {
   fetchAthleteById,
   fetchAthletesByTeamId,
   fetchAthleteStatisticByGameId,
+  fetchAthleteTweets,
 } = require('../controllers');
 
 const router = Router();
@@ -16,5 +17,8 @@ router.get('/team/:teamId', routeHandler(fetchAthletesByTeamId));
 
 // Fetch game statistic for the specified athlete and game identifiers
 router.get('/statistic/', routeHandler(fetchAthleteStatisticByGameId));
+
+// Fetch tweets by the specified athlete (optionally with a date range and pagination params)
+router.get('/tweets/', routeHandler(fetchAthleteTweets));
 
 module.exports = router;

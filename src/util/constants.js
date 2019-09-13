@@ -8,6 +8,7 @@ module.exports = {
     FETCH_ATHLETE_FAILED: 'Failed to fetch athlete detail',
     FETCH_ATHLETE_STATISTIC_FAILED: 'Failed to fetch athlete statistic',
     FETCH_ATHLETES_FAILED: 'Failed to fetch athlete list',
+    FETCH_ATHLETE_TWEETS_FAILED: 'Failed to fetch athlete tweets',
     FETCH_GAMES_FAILED: 'Failed to fetch game records',
     FETCH_GAME_DETAIL_FAILED: 'Failed to fetch game detail',
   },
