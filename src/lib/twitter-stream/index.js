@@ -35,7 +35,6 @@ const setupTwitterStream = () => {
 
   Twitter.on('connection success', (uri) => {
     console.log('Twitter Stream - Connected', uri);
-    handleSetupError(new Error('Connection Test Error'));
   });
 
   Twitter.on('connection aborted', () => {
