@@ -1,5 +1,5 @@
 const TwitterStream = require('twitter-stream-api');
-const { updateCachedTweetsByAthleteId, getCachedTweetsByAthleteId } = require('../redis/twitter');
+const { updateCachedTweetsByAthleteId } = require('../redis/twitter');
 
 const {
   TWITTER_CONSUMER_KEY,
@@ -68,8 +68,6 @@ const setupTwitterStream = () => {
   Twitter.on('connection error unknown', (error) => {
     console.log('Twitter Stream - Unknown Error', error);
   });
-
-  getCachedTweetsByAthleteId(1, '20190913115900', '20190913115959', 0, 3).then(result => console.log(result));
 };
 
 module.exports = {
