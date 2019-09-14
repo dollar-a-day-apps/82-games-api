@@ -28,6 +28,35 @@ const parseTweets = (tweets) => {
   return parsedTweets;
 };
 
+const parseAthleteStatistics = ({
+  dataValues,
+}) => {
+  const {
+    AthleteStatistics,
+    ...athleteData
+  } = dataValues;
+
+  return {
+    ...athleteData,
+    performanceStatisticsByGameId: AthleteStatistics.reduce((acc, athleteStatistic) => {
+      const {
+        dataValues: {
+          gameId,
+          performanceStatistics,
+        },
+      } = athleteStatistic;
+
+      return {
+        ...acc,
+        [gameId]: {
+          gameId,
+          ...performanceStatistics,
+        },
+      };
+    }, {}),
+  };
+};
+
 module.exports = {
   fetchAthleteById: async (req) => {
     const { params } = req;
@@ -39,10 +68,11 @@ module.exports = {
     try {
       const athlete = await Athlete.findOne({
         where: { id },
+        include: [AthleteStatistic],
         plain: true,
       });
 
-      return sanitizeObject(athlete, ['referenceId']);
+      return sanitizeObject(parseAthleteStatistics(athlete), ['referenceId'], false);
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_ATHLETE_FAILED), {
         fn: 'fetchAthleteById',

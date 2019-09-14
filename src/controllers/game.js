@@ -73,6 +73,7 @@ const parseStatistic = (game) => {
   } = game;
 
   const gameSeason = getSeason(dateTime);
+
   if (gameSeason) {
     return {
       ...game,
