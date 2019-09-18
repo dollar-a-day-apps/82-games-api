@@ -23,11 +23,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   Game.associate = (models) => {
-    Game.hasMany(models.UserPrediction, {
-      foreignKey: 'gameId',
-      onDelete: 'cascade',
-      hooks: 'true',
-    });
     Game.hasOne(models.GameStatistic, {
       foreignKey: 'gameId',
       onDelete: 'cascade',
