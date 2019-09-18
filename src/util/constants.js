@@ -3,7 +3,6 @@ module.exports = {
     UNAUTHORIZED_ACCESS: 'Unauthorized Access',
   },
   routeErrorMessages: {
-    AUTHENTICATE_USER_FAILED: 'Failed to authenticate user',
     FETCH_TEAMS_FAILED: 'Failed to fetch team records',
     FETCH_ATHLETE_FAILED: 'Failed to fetch athlete detail',
     FETCH_ATHLETE_STATISTIC_FAILED: 'Failed to fetch athlete statistic',
