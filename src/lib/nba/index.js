@@ -4,7 +4,7 @@ const Promise = require('bluebird');
 const template = require('nba-client-template');
 const { cloneDeep } = require('lodash');
 const {
-  // Team,
+  Team,
   Game,
 } = require('../../database/models');
 
@@ -82,15 +82,23 @@ const sanitizeStatistic = (stats, unusedFields) => {
 };
 
 const generatePastGamesStatistic = async () => {
-  // const seasonFirstDate = '2019-09-30';
+  // const seasonFirstDate = '2019-10-23';
   // const seasonLastDate = '2020-04-15';
   const seasonFirstDate = '2018-10-17';
-  const seasonLastDate = '2019-04-10';
+  const seasonLastDate = '2019-04-11';
+  // const seasonFirstDate = '2017-10-18';
+  // const seasonLastDate = '2018-04-12';
+  // const seasonFirstDate = '2016-12-10';
+  // const seasonLastDate = '2017-04-13';
   const seasonDurationInDays = moment(seasonLastDate).diff(moment(seasonFirstDate), 'days');
   const dayOffsets = [...Array(seasonDurationInDays + 1).keys()];
   const mainTeamId = '1610612751';
 
-  // const teamMapping = await getTeamMapping();
+  const teamMapping = {};
+  const teams = await Team.findAll();
+  teams.forEach((team) => {
+    teamMapping[team.referenceId] = team.id;
+  });
 
   const gameRecords = [];
   let teamIds = {};
@@ -151,8 +159,75 @@ const generatePastGamesStatistic = async () => {
     }
   };
 
-  console.log("      return queryInterface.bulkInsert('GameStatistics', [{");
+  // -----------------------
+  // Game List
+  // const games = await Game.findAll({});
+  // const getGameArena = (teamId) => {
+  //   let ret;
+  //   games.forEach((game) => {
+  //     const { homeTeamId, arena } = game;
 
+  //     if (homeTeamId === teamId) {
+  //       ret = arena;
+  //     }
+  //   });
+
+  //   return ret;
+  // };
+  // console.log('GameCount', gameRecords.length);
+  // console.log("      return queryInterface.bulkInsert('Games', [{");
+  // for (let i = 0; i < gameRecords.length; i += 1) {
+  //   const record = gameRecords[i];
+  //   const {
+  //     header,
+  //     homeTeam,
+  //     awayTeam,
+  //   } = record;
+  //   const {
+  //     GAME_DATE_EST,
+  //     GAME_ID,
+  //     // SEASON,
+  //   } = header;
+
+  //   const homeTeamId = teamMapping[`${homeTeam.TEAM_ID}`];
+  //   const awayTeamId = teamMapping[`${awayTeam.TEAM_ID}`];
+  //   const gameDate = moment.tz(GAME_DATE_EST, 'America/New_York').format('YYYY-MM-DD');
+  //   let est;
+
+  //   // 2016-2017
+  //   if (gameDate < '2017-11-06') {
+  //     est = 4;
+  //   } else if (gameDate < '2018-03-12') {
+  //     est = 5;
+  //   } else {
+  //     est = 4;
+  //   }
+
+  //   // 2017-2018
+  //   // if (gameDate < '2017-11-05') {
+  //   //   est = 4;
+  //   // } else if (gameDate < '2018-03-11') {
+  //   //   est = 5;
+  //   // } else {
+  //   //   est = 4;
+  //   // }
+
+  //   console.log(`        dateTime: convertToUtc('${gameDate} 00:00:00-0${est}'),`);
+  //   console.log(`        referenceId: '${GAME_ID}',`);
+  //   console.log(`        homeTeamId: ${homeTeamId},`);
+  //   console.log(`        awayTeamId: ${awayTeamId},`);
+  //   console.log(`        arena: '${getGameArena(homeTeamId)}',`);
+
+  //   console.log('        createdAt: currentDateTime,');
+  //   console.log('        updatedAt: currentDateTime,');
+  //   console.log('      }, {');
+  // }
+  // console.log('      }], {});');
+  // -----------------------
+
+  // -----------------------
+  // Game Stats
+  console.log("      return queryInterface.bulkInsert('GameStatistics', [{");
   const games = await Game.findAll({});
   games.forEach((game) => {
     const {
@@ -195,17 +270,32 @@ const generatePastGamesStatistic = async () => {
   });
 
   console.log('      }], {});');
+  // -----------------
 };
 
 const generatePlayerGamesStatistic = async () => {
-  const seasonFirstDate = '2019-09-30';
+  // const seasonFirstDate = '2019-09-30';
   // const seasonLastDate = '2020-04-15';
   // const seasonFirstDate = '2018-10-17';
   // const seasonLastDate = '2019-04-10';
+  const seasonFirstDate = '2019-09-01';
+  // const seasonLastDate = '2017-04-13';
   const mainAthleteId = 1;
   const mainPlayerId = '203915';
   const seasonCode = '2018-19';
   const seasonType = 'Regular+Season';
+
+  // for (let i = 226; i <= 307; i += 1) {
+  //   console.log(`        gameId: ${i},`);
+  //   console.log(`        athleteId: ${mainAthleteId},`);
+
+  //   console.log("        performanceStatistics: '{}',");
+
+  //   console.log('        createdAt: currentDateTime,');
+  //   console.log('        updatedAt: currentDateTime,');
+  //   console.log('      }, {');
+  // }
+  // return;
 
   let gameRecords = [];
   try {
@@ -215,7 +305,7 @@ const generatePlayerGamesStatistic = async () => {
   } catch (err) {
     console.log(err);
   }
-
+  // console.log(gameRecords);
   const getAthleteStatistic = (refId) => {
     for (let i = 0; i < gameRecords.length; i += 1) {
       const record = gameRecords[i];
@@ -243,7 +333,6 @@ const generatePlayerGamesStatistic = async () => {
     const dbDate = moment.tz(seasonFirstDate, 'America/New_York');
 
     if (gameDate.isBefore(dbDate)) {
-      // console.log(`Try: ${dateTime}`);
       try {
         const record = getAthleteStatistic(referenceId, dateTime);
 

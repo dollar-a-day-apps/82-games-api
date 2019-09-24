@@ -27,11 +27,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   Athlete.associate = (models) => {
-    Athlete.hasMany(models.UserPrediction, {
-      foreignKey: 'athleteId',
-      onDelete: 'cascade',
-      hooks: 'true',
-    });
     Athlete.hasMany(models.AthleteStatistic, {
       foreignKey: 'athleteId',
       onDelete: 'cascade',
