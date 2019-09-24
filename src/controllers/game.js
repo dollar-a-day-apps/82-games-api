@@ -154,19 +154,30 @@ module.exports = {
     const { id } = params;
 
     try {
-      const game = await Game.findOne({
-        where: { id },
+      // Reformat the list of gameIds and reject requests with absurd number of gameIds
+      const ids = id.split(',');
+      if (ids.length > 100) {
+        throw new Error('Bad Request');
+      }
+
+      const games = await Game.findAll({
+        where: { id: ids },
         include: [GameStatistic],
         raw: true,
       });
 
       // Attach season identifier and also return the final result/points from both teams
       // then remove unrelevant fields
-      const sanitizedGame = sanitizeObject(parseStatistic(game), [
-        'referenceId',
-        ...unusedStatFields,
-      ], false);
-      return sanitizedGame;
+      const gameStats = [];
+      games.forEach((game) => {
+        const sanitizedGame = sanitizeObject(parseStatistic(game), [
+          'referenceId',
+          ...unusedStatFields,
+        ], false);
+        gameStats.push(sanitizedGame);
+      });
+
+      return gameStats;
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_GAME_DETAIL_FAILED), {
         fn: 'fetchGameStatisticById',
