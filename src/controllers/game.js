@@ -49,7 +49,7 @@ const appendMetadata = (games) => {
     if (gameSeason) {
       result.push({
         ...game,
-        season: gameSeason.id,
+        seasonYears: gameSeason.seasonYears,
         homeTeamPoints,
         awayTeamPoints,
       });
