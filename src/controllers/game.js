@@ -37,6 +37,8 @@ const getSeason = (date) => {
 // and then grab the final point count for each teams from the stats
 const appendMetadata = (games) => {
   const result = [];
+  let lastSeasonDate = '';
+  let gameNumber = 1;
 
   games.forEach((game) => {
     const {
@@ -47,9 +49,19 @@ const appendMetadata = (games) => {
 
     const gameSeason = getSeason(dateTime);
     if (gameSeason) {
+      const { startDate } = gameSeason;
+
+      if (lastSeasonDate !== startDate) {
+        lastSeasonDate = startDate;
+        gameNumber = 1;
+      } else {
+        gameNumber += 1;
+      }
+
       result.push({
         ...game,
         seasonYears: gameSeason.seasonYears,
+        gameNumber,
         homeTeamPoints,
         awayTeamPoints,
       });
@@ -77,7 +89,7 @@ const parseStatistic = (game) => {
   if (gameSeason) {
     return {
       ...game,
-      season: gameSeason.id,
+      seasonYears: gameSeason.seasonYears,
       homeTeamPoints,
       awayTeamPoints,
       homeTeamStatistics,
