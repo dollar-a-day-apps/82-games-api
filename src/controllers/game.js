@@ -144,9 +144,8 @@ module.exports = {
         order: [
           ['gameId', 'ASC'],
         ],
-        // raw: true,
       });
-      // return games;
+
       // Attach season identifier and also return the final result/points from both teams
       // then remove unrelevant fields
       const parsedGames = parseAthleteGames(games);
