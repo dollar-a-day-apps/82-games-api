@@ -3,15 +3,12 @@ const {
   Sequelize: { Op },
   Game,
   GameStatistic,
+  AthleteStatistic,
 } = require('../database/models');
 const throwError = require('../util/throw-error');
 const validateInput = require('../joi/validate-input');
 const {
-  sanitizeList,
-  sanitizeObject,
-} = require('../util/sanitize-output');
-const {
-  fetchGamesByTeamIdSchema,
+  fetchGamesByAthleteIdSchema,
   fetchGameStatisticByIdSchema,
 } = require('../joi/methods');
 const { routeErrorMessages } = require('../util/constants');
@@ -33,19 +30,28 @@ const getSeason = (date) => {
   return gameSeason;
 };
 
-// Attach the season identifier for each games
+// Attach the season identifier for each games of the specified athlete
 // and then grab the final point count for each teams from the stats
-const appendMetadata = (games) => {
+const parseAthleteGames = (games) => {
   const result = [];
   let lastSeasonDate = '';
   let gameNumber = 1;
 
   games.forEach((game) => {
     const {
-      dateTime,
-      'GameStatistic.homeTeamPoints': homeTeamPoints,
-      'GameStatistic.awayTeamPoints': awayTeamPoints,
+      Game: {
+        id,
+        homeTeamId,
+        awayTeamId,
+        arena,
+        dateTime,
+      },
     } = game;
+    const gameStat = game.Game.GameStatistic || {};
+    const {
+      homeTeamPoints = 0,
+      awayTeamPoints = 0,
+    } = gameStat;
 
     const gameSeason = getSeason(dateTime);
     if (gameSeason) {
@@ -59,7 +65,11 @@ const appendMetadata = (games) => {
       }
 
       result.push({
-        ...game,
+        id,
+        homeTeamId,
+        awayTeamId,
+        arena,
+        dateTime,
         seasonYears: gameSeason.seasonYears,
         gameNumber,
         homeTeamPoints,
@@ -77,18 +87,28 @@ const appendMetadata = (games) => {
 // Pull out detailed statistic for the specified game
 const parseStatistic = (game) => {
   const {
+    id,
+    homeTeamId,
+    awayTeamId,
+    arena,
     dateTime,
-    'GameStatistic.homeTeamPoints': homeTeamPoints,
-    'GameStatistic.awayTeamPoints': awayTeamPoints,
-    'GameStatistic.homeTeamStatistics': homeTeamStatistics,
-    'GameStatistic.awayTeamStatistics': awayTeamStatistics,
   } = game;
+  const gameStat = game.GameStatistic || {};
+  const {
+    homeTeamPoints = 0,
+    awayTeamPoints = 0,
+    homeTeamStatistics = {},
+    awayTeamStatistics = {},
+  } = gameStat;
 
   const gameSeason = getSeason(dateTime);
 
   if (gameSeason) {
     return {
-      ...game,
+      id,
+      homeTeamId,
+      awayTeamId,
+      arena,
       seasonYears: gameSeason.seasonYears,
       homeTeamPoints,
       awayTeamPoints,
@@ -101,48 +121,38 @@ const parseStatistic = (game) => {
   }
 };
 
-const unusedStatFields = [
-  'GameStatistic.id',
-  'GameStatistic.gameId',
-  'GameStatistic.homeTeamPoints',
-  'GameStatistic.awayTeamPoints',
-  'GameStatistic.homeTeamStatistics',
-  'GameStatistic.awayTeamStatistics',
-  'GameStatistic.createdAt',
-  'GameStatistic.updatedAt',
-];
-
 module.exports = {
-  fetchGamesByTeamId: async (req) => {
+  fetchGamesByAthleteId: async (req) => {
     const { params } = req;
 
-    await validateInput(params, fetchGamesByTeamIdSchema);
+    await validateInput(params, fetchGamesByAthleteIdSchema);
 
-    const { teamId } = params;
+    const { athleteId } = params;
 
     try {
-      const games = await Game.findAll({
+      const games = await AthleteStatistic.findAll({
         where: {
-          [Op.or]: [{
-            homeTeamId: teamId,
-          }, {
-            awayTeamId: teamId,
-          }],
+          athleteId,
+          performanceStatistics: { [Op.ne]: null },
         },
-        include: [GameStatistic],
-        raw: true,
+        include: [{
+          model: Game,
+          include: [
+            GameStatistic,
+          ],
+        }],
+        order: [
+          ['gameId', 'ASC'],
+        ],
       });
 
       // Attach season identifier and also return the final result/points from both teams
       // then remove unrelevant fields
-      const sanitizedGames = sanitizeList(appendMetadata(games), [
-        'referenceId',
-        ...unusedStatFields,
-      ]);
-      return sanitizedGames;
+      const parsedGames = parseAthleteGames(games);
+      return parsedGames;
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_GAMES_FAILED), {
-        fn: 'fetchGamesByTeamId',
+        fn: 'fetchGamesByAthleteId',
         source: 'src/controller/game.js',
         payload: JSON.stringify({
           errorDetail: err.message,
@@ -175,17 +185,13 @@ module.exports = {
       const games = await Game.findAll({
         where: { id: ids },
         include: [GameStatistic],
-        raw: true,
       });
 
       // Attach season identifier and also return the final result/points from both teams
       // then remove unrelevant fields
       const gameStats = [];
       games.forEach((game) => {
-        const sanitizedGame = sanitizeObject(parseStatistic(game), [
-          'referenceId',
-          ...unusedStatFields,
-        ], false);
+        const sanitizedGame = parseStatistic(game);
         gameStats.push(sanitizedGame);
       });
 
