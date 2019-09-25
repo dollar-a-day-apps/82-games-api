@@ -141,6 +141,9 @@ module.exports = {
             GameStatistic,
           ],
         }],
+        order: [
+          ['gameId', 'ASC'],
+        ],
         // raw: true,
       });
       // return games;
