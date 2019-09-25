@@ -37,6 +37,8 @@ const getSeason = (date) => {
 // and then grab the final point count for each teams from the stats
 const appendMetadata = (games) => {
   const result = [];
+  let lastSeasonDate = '';
+  let gameNumber = 1;
 
   games.forEach((game) => {
     const {
@@ -47,9 +49,19 @@ const appendMetadata = (games) => {
 
     const gameSeason = getSeason(dateTime);
     if (gameSeason) {
+      const { startDate } = gameSeason;
+
+      if (lastSeasonDate !== startDate) {
+        lastSeasonDate = startDate;
+        gameNumber = 1;
+      } else {
+        gameNumber += 1;
+      }
+
       result.push({
         ...game,
-        season: gameSeason.id,
+        seasonYears: gameSeason.seasonYears,
+        gameNumber,
         homeTeamPoints,
         awayTeamPoints,
       });
@@ -77,7 +89,7 @@ const parseStatistic = (game) => {
   if (gameSeason) {
     return {
       ...game,
-      season: gameSeason.id,
+      seasonYears: gameSeason.seasonYears,
       homeTeamPoints,
       awayTeamPoints,
       homeTeamStatistics,
@@ -154,19 +166,30 @@ module.exports = {
     const { id } = params;
 
     try {
-      const game = await Game.findOne({
-        where: { id },
+      // Reformat the list of gameIds and reject requests with absurd number of gameIds
+      const ids = id.split(',');
+      if (ids.length > 100) {
+        throw new Error('Bad Request');
+      }
+
+      const games = await Game.findAll({
+        where: { id: ids },
         include: [GameStatistic],
         raw: true,
       });
 
       // Attach season identifier and also return the final result/points from both teams
       // then remove unrelevant fields
-      const sanitizedGame = sanitizeObject(parseStatistic(game), [
-        'referenceId',
-        ...unusedStatFields,
-      ], false);
-      return sanitizedGame;
+      const gameStats = [];
+      games.forEach((game) => {
+        const sanitizedGame = sanitizeObject(parseStatistic(game), [
+          'referenceId',
+          ...unusedStatFields,
+        ], false);
+        gameStats.push(sanitizedGame);
+      });
+
+      return gameStats;
     } catch (err) {
       return throwError(new Error(routeErrorMessages.FETCH_GAME_DETAIL_FAILED), {
         fn: 'fetchGameStatisticById',

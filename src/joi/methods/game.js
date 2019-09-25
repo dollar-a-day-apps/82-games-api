@@ -19,7 +19,7 @@ module.exports = {
       id: id.required(),
     },
     hints: {
-      id: 'Invalid game identifier',
+      id: 'Invalid game identifiers',
     },
   },
 };

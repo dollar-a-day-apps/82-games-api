@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
 module.exports = {
-  id: Joi.number().positive(),
+  id: Joi.string().regex(/^[-+]?(?:[0-9]+,)*[0-9]+(?:\.[0-9]+)?$/), // Allow comma separated numbers only
   teamId: Joi.number().positive(),
 };
