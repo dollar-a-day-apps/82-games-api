@@ -39,6 +39,7 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
       screen_name: userHandle,
       profile_image_url_https: userProfileImageUrl,
     },
+    retweeted_status,
   } = tweet;
 
   // Normalize Twitter's unusual date format and get only what we need (Date and Hour)
@@ -58,6 +59,11 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
     userHandle,
     userProfileImageUrl,
     timestamp,
+    ...retweeted_status && {
+      userId: retweeted_status.user.id,
+      userHandle: retweeted_status.user.screen_name,
+      userProfileImageUrl: retweeted_status.user.profile_image_url_https,
+    },
   };
   const serializedTweet = JSON.stringify(newTweet);
 

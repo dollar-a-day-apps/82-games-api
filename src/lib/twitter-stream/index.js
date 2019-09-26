@@ -30,12 +30,13 @@ const setupTwitterStream = () => {
     try {
       // Only fetch the latest 100 tweets after the last one already saved locally
       const lastTweet = await getLastTweetByAthleteId(1);
+
       const params = { user_id: mainTwitterId, count: 100, since_id: lastTweet.id };
       const tweets = await client.get('statuses/user_timeline', params);
-      console.log('New Tweets: ', tweets.length);
+      // console.log('New Tweets: ', tweets.length);
       tweets.forEach((tweet) => {
-        console.log('--------');
-        console.log(tweet.text);
+        // console.log('--------');
+        // console.log(tweet.text);
         updateCachedTweetsByAthleteId(1, tweet);
       });
     } catch (err) {
