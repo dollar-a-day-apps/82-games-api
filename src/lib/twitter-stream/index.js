@@ -1,5 +1,8 @@
-const TwitterStream = require('twitter-stream-api');
-const { updateCachedTweetsByAthleteId } = require('../redis/twitter');
+const Twitter = require('twitter');
+const {
+  updateCachedTweetsByAthleteId,
+  getLastTweetByAthleteId,
+} = require('../redis/twitter');
 const throwError = require('../../util/throw-error');
 
 const {
@@ -12,78 +15,36 @@ const {
 const credentials = {
   consumer_key: TWITTER_CONSUMER_KEY,
   consumer_secret: TWITTER_CONSUMER_SECRET,
-  token: TWITTER_ACCESS_TOKEN,
-  token_secret: TWITTER_ACCESS_TOKEN_SECRET,
-};
-
-const handleSetupError = (err) => {
-  throwError(err, {
-    fn: 'setupTwitterStream',
-    source: 'src/lib/twitter-stream/index.js',
-  }, {}, false);
+  access_token_key: TWITTER_ACCESS_TOKEN,
+  access_token_secret: TWITTER_ACCESS_TOKEN_SECRET,
 };
 
 // Initiate the tweet streaming from Twitter API
 const setupTwitterStream = () => {
-  const Twitter = new TwitterStream(credentials, false);
+  const client = new Twitter(credentials);
+  const mainTwitterId = '368148234';
+  const fetchInterval = 10 * 1000; // set to 10 seconds
 
-  // Stream only for latest tweets from Spencer's account for now
-  Twitter.stream('statuses/filter', {
-    // track: 'nba',
-    follow: ['368148234'],
-  });
-
-  Twitter.on('connection success', (uri) => {
-    console.log('Twitter Stream - Connected', uri);
-  });
-
-  Twitter.on('connection aborted', () => {
-    console.log('Twitter Stream - Connection Aborted');
-    handleSetupError(new Error('Connection Aborted'));
-  });
-
-  Twitter.on('data', (obj) => {
-    // Typecast and parse accordingly as JSON
-    const tweet = JSON.parse(obj.toString('utf8'));
-    console.log(tweet.text);
-    console.log('----');
-    updateCachedTweetsByAthleteId(1, tweet);
-  });
-
-  // Sort of like "PING" from Twitter to indicate that the connection is still alive
-  Twitter.on('data keep-alive', () => {
-    console.log('Twitter Stream - Keep-alive');
-  });
-
-  Twitter.on('data error', (error) => {
-    console.log('Twitter Stream - Error', error);
-    handleSetupError(error);
-  });
-
-  Twitter.on('connection rate limit', (httpStatusCode) => {
-    console.log('Twitter Stream - Rate Limit Error', httpStatusCode);
-    handleSetupError(new Error(`Connection Rate Limited: ${httpStatusCode}`));
-  });
-
-  Twitter.on('connection error network', (error) => {
-    console.log('Twitter Stream - Network Error', error);
-    handleSetupError(error);
-  });
-
-  Twitter.on('connection error http', (httpStatusCode) => {
-    console.log('Twitter Stream - HTTP Error', httpStatusCode);
-    handleSetupError(`HTTP Error: ${httpStatusCode}`);
-  });
-
-  Twitter.on('connection error stall', () => {
-    console.log('Twitter Stream - Connection Stalled');
-    handleSetupError(new Error('Connection Stalled'));
-  });
-
-  Twitter.on('connection error unknown', (error) => {
-    console.log('Twitter Stream - Unknown Error', error);
-    handleSetupError(error);
-  });
+  // Periodically fetch and sync Spencer's latest tweets to our local storage
+  setInterval(async () => {
+    try {
+      // Only fetch the latest 100 tweets after the last one already saved locally
+      const lastTweet = await getLastTweetByAthleteId(1);
+      const params = { user_id: mainTwitterId, count: 100, since_id: lastTweet.id };
+      const tweets = await client.get('statuses/user_timeline', params);
+      console.log('New Tweets: ', tweets.length);
+      tweets.forEach((tweet) => {
+        console.log('--------');
+        console.log(tweet.text);
+        updateCachedTweetsByAthleteId(1, tweet);
+      });
+    } catch (err) {
+      throwError(err, {
+        fn: 'setupTwitterStream',
+        source: 'src/lib/twitter-stream/index.js',
+      }, {}, false);
+    }
+  }, fetchInterval);
 };
 
 module.exports = {

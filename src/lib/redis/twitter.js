@@ -17,6 +17,14 @@ const getCachedTweetsByAthleteId = async (athleteId, fromDate = '', toDate = '',
   return redisClient().ZREVRANGEBYSCOREAsync(keyName, toTimestamp, fromTimestamp, 'LIMIT', offset, count);
 };
 
+const getLastTweetByAthleteId = async (athleteId) => {
+  const keyName = getAthleteKey(athleteId);
+  const tweet = await redisClient().ZREVRANGEAsync(keyName, 0, 0);
+
+  const lastTweet = tweet[0] || '{}';
+  return JSON.parse(lastTweet);
+};
+
 // Insert new tweet to the cached athlete tweets for the specified athleteId
 const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
   const keyName = getAthleteKey(athleteId);
@@ -25,7 +33,6 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
     source,
     text,
     created_at,
-    timestamp_ms: timestamp,
     user: {
       id_str: userId,
       name: userFullname,
@@ -40,6 +47,7 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
   const hourField = tweetDateTime.format('HH');
 
   // Prepare the next to be inserted tweet record
+  const timestamp = tweetDateTime.unix();
   const newTweet = {
     id,
     source,
@@ -75,5 +83,6 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
 
 module.exports = {
   getCachedTweetsByAthleteId,
+  getLastTweetByAthleteId,
   updateCachedTweetsByAthleteId,
 };
