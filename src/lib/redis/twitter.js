@@ -11,8 +11,8 @@ const getAthleteKey = athleteId => `${baseAthleteKey}-${athleteId}`;
 // The date-range should be already in UTC timezone, formatted as YYYYMMDDHHmmss, ie. 20190901000000 (24Hr-format)
 const getCachedTweetsByAthleteId = async (athleteId, fromDate = '', toDate = '', offset = 0, count = 20) => {
   const keyName = getAthleteKey(athleteId);
-  const fromTimestamp = fromDate ? moment.utc(fromDate, 'YYYYMMDDHHmmss', 'en').format('x') : '-inf';
-  const toTimestamp = toDate ? moment.utc(toDate, 'YYYYMMDDHHmmss', 'en').format('x') : '+inf';
+  const fromTimestamp = fromDate ? moment.utc(fromDate, 'YYYYMMDDHHmmss', 'en').format('X') : '-inf';
+  const toTimestamp = toDate ? moment.utc(toDate, 'YYYYMMDDHHmmss', 'en').format('X') : '+inf';
 
   return redisClient().ZREVRANGEBYSCOREAsync(keyName, toTimestamp, fromTimestamp, 'LIMIT', offset, count);
 };
