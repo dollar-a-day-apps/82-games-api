@@ -60,9 +60,9 @@ const updateCachedTweetsByAthleteId = async (athleteId, tweet) => {
     userProfileImageUrl,
     timestamp,
     ...retweeted_status && {
-      userId: retweeted_status.user.id,
-      userHandle: retweeted_status.user.screen_name,
-      userProfileImageUrl: retweeted_status.user.profile_image_url_https,
+      retweetedUserId: retweeted_status.user.id,
+      retweetedUserHandle: retweeted_status.user.screen_name,
+      retweetedUserProfileImageUrl: retweeted_status.user.profile_image_url_https,
     },
   };
   const serializedTweet = JSON.stringify(newTweet);

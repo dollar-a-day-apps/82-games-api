@@ -35,8 +35,8 @@ const setupTwitterStream = () => {
       const tweets = await client.get('statuses/user_timeline', params);
       // console.log('New Tweets: ', tweets.length);
       tweets.forEach((tweet) => {
-        // console.log('--------');
-        // console.log(tweet.text);
+        console.log('--------');
+        console.log(tweet.text);
         updateCachedTweetsByAthleteId(1, tweet);
       });
     } catch (err) {
